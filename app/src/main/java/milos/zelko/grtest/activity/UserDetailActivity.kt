@@ -1,12 +1,13 @@
-package milos.zelko.grtest
+package milos.zelko.grtest.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import milos.zelko.grtest.R
 
-class MainActivity : AppCompatActivity() {
+class UserDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_user_detail)
     }
 }
