@@ -1,9 +1,11 @@
 package milos.zelko.grtest.model
 
+import com.google.gson.annotations.SerializedName
+
 data class User (
-    private var id: Long,
-    private var email: String,
-    private var firstName: String,
-    private var lastName: String,
-    private var avatar: String
+    @SerializedName("id") val id: Long,
+    @SerializedName("email") val email: String,
+    @SerializedName("first_name") val firstName: String,
+    @SerializedName("last_name") val lastName: String,
+    @SerializedName("avatar") val avatar: String
 )

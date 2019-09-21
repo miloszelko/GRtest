@@ -1,10 +1,12 @@
 package milos.zelko.grtest.activity
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import milos.zelko.grtest.R
 
-class UserDetailActivity : AppCompatActivity() {
+/**
+ * Activity responsible for displaying details about specific user
+ */
+class UserDetailActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
