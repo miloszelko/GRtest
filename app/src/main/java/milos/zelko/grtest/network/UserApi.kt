@@ -1,6 +1,6 @@
 package milos.zelko.grtest.network
 
-import io.reactivex.Observable
+import io.reactivex.Single
 import milos.zelko.grtest.network.reponse.UserListResponse
 import milos.zelko.grtest.network.reponse.UserResponse
 import retrofit2.http.GET
@@ -13,9 +13,9 @@ import retrofit2.http.Query
 interface UserApi {
 
     @GET("users/{id}")
-    fun getUser(@Path("id") id: Int): Observable<UserResponse>
+    fun getUser(@Path("id") id: Int): Single<UserResponse>
 
     @GET("users")
-    fun getUsers(@Query("page") page: Int, @Query("per_page") perPage: Int): Observable<UserListResponse>
+    fun getUsers(@Query("page") page: Int, @Query("per_page") perPage: Int): Single<UserListResponse>
 
 }

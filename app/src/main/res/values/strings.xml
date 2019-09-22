@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GrTest</string>
+    <string name="user_avatar">User avatar</string>
+    <string name="users">Users</string>
+    <string name="user_detail">User detail</string>
+    <string name="error_data_load">Error occurred while loading data</string>
+    <string name="retry">Retry</string>
 </resources>
