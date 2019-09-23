@@ -6,7 +6,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import milos.zelko.grtest.model.User
 
-class UserAdapter: PagedListAdapter<User, UserViewHolder>(diffCallback) {
+class UserAdapter(val listener: UserClickListener): PagedListAdapter<User, UserViewHolder>(diffCallback) {
 
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<User>() {
@@ -30,7 +30,11 @@ class UserAdapter: PagedListAdapter<User, UserViewHolder>(diffCallback) {
             holder.setName("${it.firstName} ${it.lastName}")
             holder.setEmail(user.email)
             holder.setAvatar(user.avatar)
+            holder.itemView.setOnClickListener { listener.userClicked(user) }
         }
+    }
 
+    interface UserClickListener {
+        fun userClicked(user: User)
     }
 }

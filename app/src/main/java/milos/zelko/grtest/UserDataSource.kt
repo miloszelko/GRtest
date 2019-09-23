@@ -4,16 +4,16 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import milos.zelko.grtest.enum.EState
 import milos.zelko.grtest.model.User
 import milos.zelko.grtest.network.RetrofitClient
 
-
-
 class UserDataSource: PageKeyedDataSource<Int, User>()  {
 
     private val compositeDisposable = CompositeDisposable()
-    var state: MutableLiveData<EState> = MutableLiveData()
+    private val state: MutableLiveData<EState> = MutableLiveData()
+    private val requestFailureLiveData: MutableLiveData<RequestFailure> = MutableLiveData()
 
     companion object {
         const val PAGE_SIZE = 5
@@ -24,40 +24,71 @@ class UserDataSource: PageKeyedDataSource<Int, User>()  {
         this.state.postValue(state)
     }
 
+    fun getState() = state
+
+    fun getRequestFailureLiveData() = requestFailureLiveData
+
+    private fun handleError(retryable: Retryable, t: Throwable) {
+        requestFailureLiveData.postValue(RequestFailure(retryable, t))
+    }
+
+    /**
+     * Loads initial data
+     */
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, User>) {
         updateState(EState.LOADING)
         compositeDisposable.add(RetrofitClient.api.getUsers(FIRST_PAGE, PAGE_SIZE)
-             .subscribe (
+            .subscribeOn(Schedulers.computation())
+            .subscribe (
                  {
-                     Log.d("UserDataSource", "LoadInitial")
                      updateState(EState.DONE)
                      callback.onResult(it.data, null, FIRST_PAGE + 1)
                  },  {
                      updateState(EState.ERROR)
-                     Log.d("UserDataSource", "LoadInitial ERROR: ${it.message}")
+                     Log.e("UserDataSource", "loadInitial ERROR", it)
+
+                     val retryable = object : Retryable {
+                         override fun retry() {
+                             loadInitial(params, callback)
+                         }
+                     }
+                     handleError(retryable, it)
                  }
              )
          )
     }
 
+    /**
+     * Loads the next page data
+     */
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, User>) {
         updateState(EState.LOADING)
         compositeDisposable.add(RetrofitClient.api.getUsers(params.key, PAGE_SIZE)
+            .subscribeOn(Schedulers.computation())
             .subscribe(
                 {
-                    Log.d("UserDataSource", "LoadAfter, PAGE: ${params.key}")
                     updateState(EState.DONE)
                     callback.onResult(it.data, params.key + 1)
                 },
                 {
                     updateState(EState.ERROR)
-                    Log.d("UserDataSource", "LoadAfter ERROR: ${it.message}")
+                    Log.e("UserDataSource", "loadAfter ERROR", it)
+                    val retryable = object : Retryable {
+                        override fun retry() {
+                            loadAfter(params, callback)
+                        }
+                    }
+                    handleError(retryable, it)
                 }
             )
         )
     }
 
+    /**
+     * Loads the previous page. This method is useful in cases where the data changes and we need
+     * to fetch our list starting from the middle. We have no use for it as our data will remain unchanged.
+     */
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, User>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 }
