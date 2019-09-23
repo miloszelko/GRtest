@@ -1,5 +1,6 @@
 package milos.zelko.grtest.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -41,7 +42,9 @@ class UserListActivity : BaseActivity(), UserAdapter.UserClickListener {
     }
 
     override fun userClicked(user: User) {
-        Log.d("USER CLICKED", "ID: ${user.id}")
+        val userDetailIntent = Intent(this, UserDetailActivity::class.java)
+        userDetailIntent.putExtra(UserDetailActivity.USER_ID, user.id)
+        startActivity(userDetailIntent)
     }
 
     private fun handleState(state: EState) {
