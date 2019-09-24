@@ -10,10 +10,10 @@ import retrofit2.http.Query
 /**
  * Contains endpoints for fetching data
  */
-interface UserApi {
+interface UserService {
 
     @GET("users/{id}")
-    fun getUser(@Path("id") id: Int): Single<UserResponse>
+    fun getUser(@Path("id") id: Long): Single<UserResponse>
 
     @GET("users")
     fun getUsers(@Query("page") page: Int, @Query("per_page") perPage: Int): Single<UserListResponse>

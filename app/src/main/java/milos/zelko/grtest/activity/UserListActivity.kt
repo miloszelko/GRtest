@@ -72,8 +72,9 @@ class UserListActivity : BaseActivity(), UserAdapter.UserClickListener {
         }
         tvError.text = textMessage
         btnRetry.setOnClickListener {
-            addDisposable(
-                Observable.fromCallable { requestFailure.retryable.retry() }
+            tvError.visibility = View.GONE
+            btnRetry.visibility = View.GONE
+            addDisposable(Observable.fromCallable { requestFailure.retryable.retry() }
                 .subscribeOn(Schedulers.computation())
                 .subscribe()
             )

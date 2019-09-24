@@ -25,9 +25,7 @@
                 android:layout_height="150dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
                 android:contentDescription="@string/user_avatar"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
@@ -37,12 +35,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="32dp"
                 android:text="@string/first_name"
                 android:textColor="@color/colorText"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivUserDetailAvatar" />
+                app:layout_constraintStart_toEndOf="@+id/ivUserDetailAvatar"
+                app:layout_constraintTop_toTopOf="@+id/ivUserDetailAvatar" />
 
             <TextView
                 android:id="@+id/tvLastNameLabel"

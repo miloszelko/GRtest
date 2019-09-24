@@ -5,4 +5,7 @@
     <string name="user_detail">User detail</string>
     <string name="error_data_load">Error occurred while loading data</string>
     <string name="retry">Retry</string>
+    <string name="first_name">First name:</string>
+    <string name="last_name">Last name:</string>
+    <string name="e_mail">E-mail:</string>
 </resources>
