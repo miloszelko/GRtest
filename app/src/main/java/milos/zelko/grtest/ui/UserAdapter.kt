@@ -1,12 +1,15 @@
-package milos.zelko.grtest
+package milos.zelko.grtest.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import milos.zelko.grtest.R
 import milos.zelko.grtest.model.User
 
-class UserAdapter(val listener: UserClickListener): PagedListAdapter<User, UserViewHolder>(diffCallback) {
+class UserAdapter(val listener: UserClickListener): PagedListAdapter<User, UserViewHolder>(
+    diffCallback
+) {
 
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<User>() {

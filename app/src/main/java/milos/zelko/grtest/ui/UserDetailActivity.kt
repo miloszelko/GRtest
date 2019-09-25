@@ -1,6 +1,8 @@
-package milos.zelko.grtest.activity
+package milos.zelko.grtest.ui
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,22 +27,31 @@ class UserDetailActivity : BaseActivity() {
         setContentView(R.layout.activity_user_detail)
         supportActionBar?.title = resources.getString(R.string.user_detail)
 
-        intent.extras?.let {
-            userId = it.getLong(USER_ID)
-        }
+        intent.extras?.let { userId = it.getLong(USER_ID) }
 
-        btnUserDetailRetry.setOnClickListener {
-            hideError()
-            fetchUserData(userId)
-        }
-        showUserInfo(false)
-
-
+        btnUserDetailRetry.setOnClickListener { fetchUserData(userId) }
         fetchUserData(userId)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.user_detail_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item?.let {
+            when(item.itemId){
+                R.id.menu_item_refresh -> fetchUserData(userId)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun fetchUserData(userId: Long){
         if (userId == -1L) return
+
+        hideError()
+        showUserInfo(false)
 
         addDisposable(
             RetrofitClient.api.getUser(userId)
@@ -71,13 +82,7 @@ class UserDetailActivity : BaseActivity() {
 
     private fun showUserInfo(boolean: Boolean) {
         val visibility = if (boolean) View.VISIBLE else View.GONE
-        tvFirstName.visibility = visibility
-        tvLastName.visibility = visibility
-        ivUserDetailAvatar.visibility = visibility
-        tvUserDetailEmail.visibility = visibility
-        tvFirstNameLabel.visibility = visibility
-        tvLastNameLabel.visibility = visibility
-        tvEmailLabel.visibility = visibility
+        cardUserDetail.visibility = visibility
     }
 
     private fun showError(error: Throwable) {

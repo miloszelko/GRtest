@@ -1,4 +1,4 @@
-package milos.zelko.grtest
+package milos.zelko.grtest.paging
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -12,8 +12,8 @@ import milos.zelko.grtest.network.RetrofitClient
 class UserDataSource: PageKeyedDataSource<Int, User>()  {
 
     private val compositeDisposable = CompositeDisposable()
-    private val state: MutableLiveData<EState> = MutableLiveData()
-    private val requestFailureLiveData: MutableLiveData<RequestFailure> = MutableLiveData()
+    val state: MutableLiveData<EState> = MutableLiveData()
+    val requestFailure: MutableLiveData<RequestFailure> = MutableLiveData()
 
     companion object {
         const val PAGE_SIZE = 5
@@ -24,12 +24,8 @@ class UserDataSource: PageKeyedDataSource<Int, User>()  {
         this.state.postValue(state)
     }
 
-    fun getState() = state
-
-    fun getRequestFailureLiveData() = requestFailureLiveData
-
     private fun handleError(retryable: Retryable, t: Throwable) {
-        requestFailureLiveData.postValue(RequestFailure(retryable, t))
+        requestFailure.postValue(RequestFailure(retryable, t))
     }
 
     /**
@@ -37,7 +33,10 @@ class UserDataSource: PageKeyedDataSource<Int, User>()  {
      */
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, User>) {
         updateState(EState.LOADING)
-        compositeDisposable.add(RetrofitClient.api.getUsers(FIRST_PAGE, PAGE_SIZE)
+        compositeDisposable.add(RetrofitClient.api.getUsers(
+            FIRST_PAGE,
+            PAGE_SIZE
+        )
             .subscribeOn(Schedulers.computation())
             .subscribe (
                  {
@@ -63,7 +62,9 @@ class UserDataSource: PageKeyedDataSource<Int, User>()  {
      */
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, User>) {
         updateState(EState.LOADING)
-        compositeDisposable.add(RetrofitClient.api.getUsers(params.key, PAGE_SIZE)
+        compositeDisposable.add(RetrofitClient.api.getUsers(params.key,
+            PAGE_SIZE
+        )
             .subscribeOn(Schedulers.computation())
             .subscribe(
                 {

@@ -8,4 +8,5 @@
     <string name="first_name">First name:</string>
     <string name="last_name">Last name:</string>
     <string name="e_mail">E-mail:</string>
+    <string name="refresh_data">Refresh data</string>
 </resources>

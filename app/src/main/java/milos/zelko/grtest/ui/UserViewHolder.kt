@@ -1,4 +1,4 @@
-package milos.zelko.grtest
+package milos.zelko.grtest.ui
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

@@ -1,8 +1,7 @@
-package milos.zelko.grtest.activity
+package milos.zelko.grtest.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -11,9 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user_list.*
 import milos.zelko.grtest.R
-import milos.zelko.grtest.RequestFailure
-import milos.zelko.grtest.UserAdapter
-import milos.zelko.grtest.UserListViewModel
+import milos.zelko.grtest.paging.RequestFailure
 import milos.zelko.grtest.enum.EState
 import milos.zelko.grtest.model.User
 
@@ -29,16 +26,27 @@ class UserListActivity : BaseActivity(), UserAdapter.UserClickListener {
 
         val userListViewModel = ViewModelProviders.of(this).get(UserListViewModel::class.java)
 
-        userListViewModel.state.observe(this, Observer { handleState(it) })
-        userListViewModel.requestFailureLiveData.observe(this, Observer { handleRequestFailure(it) })
-
         rvUserList.layoutManager = LinearLayoutManager(this)
         rvUserList.setHasFixedSize(true)
 
         val adapter = UserAdapter(this)
-
-        userListViewModel.userPagedList?.observe(this, Observer { adapter.submitList(it) })
         rvUserList.adapter = adapter
+
+        userListViewModel.userPagedList?.observe(this, Observer {
+            refreshLayout.isRefreshing = false
+            adapter.submitList(it)
+        })
+
+        userListViewModel.getState().observe(this, Observer {
+            handleState(it)
+        })
+        userListViewModel.getRequestFailure().observe(this, Observer {
+            handleRequestFailure(it)
+        })
+
+        refreshLayout.setOnRefreshListener {
+            userListViewModel.invalidateUserList()
+        }
     }
 
     override fun userClicked(user: User) {
@@ -50,14 +58,18 @@ class UserListActivity : BaseActivity(), UserAdapter.UserClickListener {
     private fun handleState(state: EState) {
         when(state) {
             EState.DONE -> {
-                rvUserList.visibility = View.VISIBLE
+                progressUserList.visibility = View.GONE
                 tvError.visibility = View.GONE
                 btnRetry.visibility = View.GONE
+                rvUserList.visibility = View.VISIBLE
             }
             EState.LOADING -> {
-                Log.d("UserListActivity", "LOADING")
+                tvError.visibility = View.GONE
+                btnRetry.visibility = View.GONE
+                progressUserList.visibility = View.VISIBLE
             }
             EState.ERROR -> {
+                progressUserList.visibility = View.GONE
                 rvUserList.visibility = View.GONE
                 tvError.visibility = View.VISIBLE
                 btnRetry.visibility = View.VISIBLE
@@ -72,8 +84,6 @@ class UserListActivity : BaseActivity(), UserAdapter.UserClickListener {
         }
         tvError.text = textMessage
         btnRetry.setOnClickListener {
-            tvError.visibility = View.GONE
-            btnRetry.visibility = View.GONE
             addDisposable(Observable.fromCallable { requestFailure.retryable.retry() }
                 .subscribeOn(Schedulers.computation())
                 .subscribe()

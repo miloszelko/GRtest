@@ -1,4 +1,4 @@
-package milos.zelko.grtest
+package milos.zelko.grtest.paging
 
 interface Retryable {
     fun retry()

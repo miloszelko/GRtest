@@ -1,4 +1,4 @@
-package milos.zelko.grtest.activity
+package milos.zelko.grtest.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.disposables.CompositeDisposable
