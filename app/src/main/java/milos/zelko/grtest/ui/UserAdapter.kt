@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import milos.zelko.grtest.R
 import milos.zelko.grtest.model.User
 
-class UserAdapter(val listener: UserClickListener): PagedListAdapter<User, UserViewHolder>(
+class UserAdapter(private val listener: UserClickListener): PagedListAdapter<User, UserViewHolder>(
     diffCallback
 ) {
 

@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.UserDetailActivity"
             android:parentActivityName=".ui.UserListActivity" >
-            ></activity>
+        </activity>
         <activity android:name=".ui.UserListActivity"
             android:launchMode="singleTop">
             <intent-filter>

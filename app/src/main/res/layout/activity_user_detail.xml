@@ -21,14 +21,17 @@
             android:background="@color/colorPrimary"
             android:orientation="vertical">
 
-            <ImageView
+            <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/ivUserDetailAvatar"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
                 android:contentDescription="@string/user_avatar"
+                app:civ_border_color="@android:color/white"
+                app:civ_border_width="2dp"
+                app:civ_shadow_radius="10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -38,12 +41,11 @@
                 android:id="@+id/tvFirstNameLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:text="@string/first_name"
                 android:textColor="@color/colorText"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/tvLastNameLabel"
                 app:layout_constraintTop_toBottomOf="@+id/ivUserDetailAvatar" />
 
             <TextView
@@ -53,8 +55,8 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/last_name"
                 android:textColor="@color/colorText"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@+id/tvFirstNameLabel"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/tvEmailLabel"
                 app:layout_constraintTop_toBottomOf="@+id/tvFirstNameLabel" />
 
             <TextView
@@ -65,9 +67,13 @@
                 android:layout_marginBottom="32dp"
                 android:text="@string/e_mail"
                 android:textColor="@color/colorText"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/tvLastNameLabel"
+                app:layout_constraintEnd_toStartOf="@+id/tvUserDetailEmail"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvLastNameLabel" />
 
             <TextView
@@ -76,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/colorText"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvFirstNameLabel"
                 app:layout_constraintStart_toEndOf="@+id/tvFirstNameLabel"
@@ -88,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/colorText"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvLastNameLabel"
                 app:layout_constraintStart_toEndOf="@+id/tvLastNameLabel"
@@ -100,9 +106,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/colorText"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvEmailLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tvEmailLabel"
                 tools:text="john.doe@gmail.com" />
 

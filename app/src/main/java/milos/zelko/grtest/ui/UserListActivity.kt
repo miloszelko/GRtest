@@ -27,8 +27,6 @@ class UserListActivity : BaseActivity(), UserAdapter.UserClickListener {
         val userListViewModel = ViewModelProviders.of(this).get(UserListViewModel::class.java)
 
         rvUserList.layoutManager = LinearLayoutManager(this)
-        rvUserList.setHasFixedSize(true)
-
         val adapter = UserAdapter(this)
         rvUserList.adapter = adapter
 
@@ -37,16 +35,9 @@ class UserListActivity : BaseActivity(), UserAdapter.UserClickListener {
             adapter.submitList(it)
         })
 
-        userListViewModel.getState().observe(this, Observer {
-            handleState(it)
-        })
-        userListViewModel.getRequestFailure().observe(this, Observer {
-            handleRequestFailure(it)
-        })
-
-        refreshLayout.setOnRefreshListener {
-            userListViewModel.invalidateUserList()
-        }
+        userListViewModel.getState().observe(this, Observer { handleState(it) })
+        userListViewModel.getRequestFailure().observe(this, Observer { handleRequestFailure(it) })
+        refreshLayout.setOnRefreshListener { userListViewModel.invalidateUserList() }
     }
 
     override fun userClicked(user: User) {

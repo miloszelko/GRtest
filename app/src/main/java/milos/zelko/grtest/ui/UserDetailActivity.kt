@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user_detail.*
 import milos.zelko.grtest.R
+import milos.zelko.grtest.model.User
 import milos.zelko.grtest.network.RetrofitClient
 
 /**
@@ -61,11 +63,7 @@ class UserDetailActivity : BaseActivity() {
                 .doFinally { showProgressBar(false)  }
                 .subscribe(
                     { userResponse ->
-                        val user = userResponse.data
-                        tvFirstName.text = user.firstName
-                        tvLastName.text = user.lastName
-                        tvUserDetailEmail.text = user.email
-                        Picasso.get().load(user.avatar).into(ivUserDetailAvatar)
+                        setUserInfo(userResponse.data)
                         showUserInfo(true)
                     },
                     { error ->
@@ -73,6 +71,13 @@ class UserDetailActivity : BaseActivity() {
                     }
                 )
         )
+    }
+
+    private fun setUserInfo(user: User) {
+        tvFirstName.text = user.firstName
+        tvLastName.text = user.lastName
+        tvUserDetailEmail.text = user.email
+        Picasso.get().load(user.avatar).into(ivUserDetailAvatar as ImageView)
     }
 
     private fun showProgressBar(boolean: Boolean) {
