@@ -49,6 +49,9 @@ class UserDetailActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    /**
+     * Loads specific user from server
+     */
     private fun fetchUserData(userId: Long){
         if (userId == -1L) return
 

@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user_list.*
 import milos.zelko.grtest.R
 import milos.zelko.grtest.paging.RequestFailure
-import milos.zelko.grtest.enum.EState
+import milos.zelko.grtest.enum.ERequestState
 import milos.zelko.grtest.model.User
 
 /**
@@ -35,31 +35,37 @@ class UserListActivity : BaseActivity(), UserAdapter.UserClickListener {
             adapter.submitList(it)
         })
 
-        userListViewModel.getState().observe(this, Observer { handleState(it) })
+        userListViewModel.getState().observe(this, Observer { manageState(it) })
         userListViewModel.getRequestFailure().observe(this, Observer { handleRequestFailure(it) })
         refreshLayout.setOnRefreshListener { userListViewModel.invalidateUserList() }
     }
 
+    /**
+     * Opens UserDetailActivity
+     */
     override fun userClicked(user: User) {
         val userDetailIntent = Intent(this, UserDetailActivity::class.java)
         userDetailIntent.putExtra(UserDetailActivity.USER_ID, user.id)
         startActivity(userDetailIntent)
     }
 
-    private fun handleState(state: EState) {
+    /**
+     * Manages UI elements based on state of request
+     */
+    private fun manageState(state: ERequestState) {
         when(state) {
-            EState.DONE -> {
+            ERequestState.DONE -> {
                 progressUserList.visibility = View.GONE
                 tvError.visibility = View.GONE
                 btnRetry.visibility = View.GONE
                 rvUserList.visibility = View.VISIBLE
             }
-            EState.LOADING -> {
+            ERequestState.LOADING -> {
                 tvError.visibility = View.GONE
                 btnRetry.visibility = View.GONE
                 progressUserList.visibility = View.VISIBLE
             }
-            EState.ERROR -> {
+            ERequestState.ERROR -> {
                 progressUserList.visibility = View.GONE
                 rvUserList.visibility = View.GONE
                 tvError.visibility = View.VISIBLE
@@ -68,6 +74,9 @@ class UserListActivity : BaseActivity(), UserAdapter.UserClickListener {
         }
     }
 
+    /**
+     * Displays cause of request failure and retry button
+     */
     private fun handleRequestFailure(requestFailure: RequestFailure) {
         var textMessage = resources.getString(R.string.error_data_load)
         requestFailure.error.message?.let {

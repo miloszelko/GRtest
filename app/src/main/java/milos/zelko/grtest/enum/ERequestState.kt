@@ -1,5 +1,5 @@
 package milos.zelko.grtest.enum
 
-enum class EState {
+enum class ERequestState {
     DONE, LOADING, ERROR
 }

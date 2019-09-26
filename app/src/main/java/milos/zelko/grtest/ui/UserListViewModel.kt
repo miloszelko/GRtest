@@ -5,7 +5,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import milos.zelko.grtest.enum.EState
+import milos.zelko.grtest.enum.ERequestState
 import milos.zelko.grtest.model.User
 import milos.zelko.grtest.paging.RequestFailure
 import milos.zelko.grtest.paging.UserDataSource
@@ -15,8 +15,7 @@ class UserListViewModel: ViewModel() {
 
     var userPagedList: LiveData<PagedList<User>>? = null
 
-    private val userDataSourceFactory: UserDataSourceFactory =
-        UserDataSourceFactory()
+    private val userDataSourceFactory: UserDataSourceFactory = UserDataSourceFactory()
 
     init {
         val config = PagedList.Config.Builder()
@@ -27,9 +26,9 @@ class UserListViewModel: ViewModel() {
         userPagedList = LivePagedListBuilder(userDataSourceFactory, config).build()
     }
 
-    fun getState(): LiveData<EState> {
+    fun getState(): LiveData<ERequestState> {
         return Transformations.switchMap<UserDataSource,
-                EState>(userDataSourceFactory.userDataSourceLiveData) { it.state }
+                ERequestState>(userDataSourceFactory.userDataSourceLiveData) { it.state }
     }
 
     fun getRequestFailure(): LiveData<RequestFailure> {
